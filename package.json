@@ -1,0 +1,12 @@
+{
+  "name": "robot-arm-controll",
+  "version": "1.0.0",
+  "description": "",
+  "devDependencies": {
+    "@types/three": "latest",
+    "lite-server": "latest"
+  },
+  "scripts": {
+    "serve": "lite-server"
+  }
+}
