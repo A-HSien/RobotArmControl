@@ -94,7 +94,8 @@
 
 
 
-    var link01, link02, link03, link04, link05, link06;
+    var link01, link02, link03, link04, link05;
+    var data = [];
 
 
     function updateModel() {
@@ -103,7 +104,7 @@
         link03.rotate();
         link04.rotate();
         link05.rotate();
-        var p = model.link06.getWorldPosition();
+        var p = model.link06.getWorldPosition(new THREE.Vector3());
         data.push(p);
         updateLine();
     };
@@ -129,7 +130,6 @@
         };
     }();
 
-    var data = [];
     function loadDate(callback) {
         var scale = 1 / 8;
         loadJSON('mockData.json', function (result) {
@@ -187,13 +187,15 @@
                 lastIndex = 0;
 
             var lastLineEnd = data[lastIndex];
-            var geometry = new THREE.Geometry();
-            geometry.vertices.push(new THREE.Vector3(lastLineEnd.x, lastLineEnd.y, lastLineEnd.z));
+            var vertices = [];
+            vertices.push(new THREE.Vector3(lastLineEnd.x, lastLineEnd.y, lastLineEnd.z));
 
             lastIndex++;
             lastLineEnd = data[lastIndex];
             if (!lastLineEnd) return;
-            geometry.vertices.push(new THREE.Vector3(lastLineEnd.x, lastLineEnd.y, lastLineEnd.z));
+
+            vertices.push(new THREE.Vector3(lastLineEnd.x, lastLineEnd.y, lastLineEnd.z));
+            var geometry = new THREE.BufferGeometry().setFromPoints( vertices );
 
             var material = new THREE.LineBasicMaterial({ color: 0xDF4949, linewidth: 5 });
             var line = new THREE.Line(geometry, material);
@@ -248,7 +250,7 @@
 
         var onError = function (xhr) { };
 
-        THREE.Loader.Handlers.add(/\.dds$/i, new THREE.DDSLoader());
+        THREE.DefaultLoadingManager.addHandler(/\.dds$/i, new THREE.DDSLoader());
 
         var mtlLoader = new THREE.MTLLoader();
         mtlLoader.setPath('objs/');
